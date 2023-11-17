@@ -1,0 +1,9 @@
+#cloud-config
+package_upgrade: true
+packages:
+ - nebula
+runcmd:
+ - nebula-cert ca -name "Annessauro, Inc" -out-crt /etc/nebula/ca.crt -out-key /etc/nebula/ca.key
+ - nebula-cert sign -name "lighthouse" -ip "192.168.100.1/24" -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -out-crt /etc/nebula/lighthouse.crt -out-key /etc/nebula/lighthouse.key
+ - nebula-cert sign -name "macbookair" -ip "192.168.100.2/24" -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -out-crt /etc/nebula/macbookair.crt -out-key /etc/nebula/macbookair.key -groups "home,ssh"
+final_message: Nebula setup finished
