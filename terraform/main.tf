@@ -3,34 +3,6 @@ resource "digitalocean_vpc" "k8s_nebula_vpc" {
   region = "nyc3"
 }
 
-data "cloudinit_config" "nebula_cloudinit" {
-  gzip          = false
-  base64_encode = false
-
-  part {
-    filename     = "nebula_config_lighthouse.yaml"
-    content_type = "jinja2"
-
-    content = file("${path.module}/nebula_config_lighthouse.yaml")
-  }
-
-  part {
-    filename     = "cloud-init.yaml"
-    content_type = "text/cloud-config"
-
-    content = file("${path.module}/cloud-init.yaml")
-  }
-}
-
-resource "digitalocean_droplet" "nebula" {
-  name      = "nebula"
-  size      = "s-1vcpu-1gb"
-  image     = "debian-12-x64"
-  region    = "nyc3"
-  vpc_uuid  = digitalocean_vpc.k8s_nebula_vpc.id
-  user_data = data.cloudinit_config.nebula_cloudinit.rendered
-}
-
 resource "digitalocean_kubernetes_cluster" "k8s" {
   name     = "k8s-cluster"
   region   = "nyc3"
@@ -39,7 +11,49 @@ resource "digitalocean_kubernetes_cluster" "k8s" {
 
   node_pool {
     name       = "main-pool"
-    size       = "s-2vcpu-2gb"
+    size       = "s-2vcpu-4gb"
     node_count = 1
   }
+}
+
+provider "kubernetes" {
+  host  = digitalocean_kubernetes_cluster.k8s.endpoint
+  token = digitalocean_kubernetes_cluster.k8s.kube_config[0].token
+  cluster_ca_certificate = base64decode(
+    digitalocean_kubernetes_cluster.k8s.kube_config[0].cluster_ca_certificate
+  )
+}
+
+provider "helm" {
+  kubernetes {
+    host  = digitalocean_kubernetes_cluster.k8s.endpoint
+    token = digitalocean_kubernetes_cluster.k8s.kube_config[0].token
+    cluster_ca_certificate = base64decode(
+      digitalocean_kubernetes_cluster.k8s.kube_config[0].cluster_ca_certificate
+    )
+  }
+}
+
+resource "helm_release" "superset" {
+  name       = "superset"
+  repository = "https://apache.github.io/superset"
+  chart      = "superset"
+  version    = "0.10.15"
+
+  values = [
+    "${file("files/values-superset.yaml")}"
+  ]
+}
+
+resource "helm_release" "psql" {
+  name       = "psql"
+  repository = "oci://registry-1.docker.io/bitnamicharts"
+  chart      = "postgresql"
+  version    = "13.2.11"
+}
+
+data "kubernetes_resources" "psql_secret" {
+  api_version    = "v1"
+  kind           = "Secret"
+  field_selector = "metadata.name==psql-postgresql"
 }
