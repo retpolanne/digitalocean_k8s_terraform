@@ -68,6 +68,7 @@ resource "helm_release" "istio-ingress" {
   chart      = "gateway"
   version    = "1.20.1"
   namespace  = "istio-ingress"
+  depends_on = [helm_release.istiod]
 }
 
 resource "helm_release" "superset" {
