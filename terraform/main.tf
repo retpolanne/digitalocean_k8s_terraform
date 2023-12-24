@@ -77,8 +77,8 @@ resource "helm_release" "nginx-ingress" {
   namespace  = "nginx-ingress"
 
   set {
-    name = "controller.service.annotations"
-    value = "service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol=true"
+    name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/do-loadbalancer-enable-proxy-protocol"
+    value = "true"
   }
 
   set {
