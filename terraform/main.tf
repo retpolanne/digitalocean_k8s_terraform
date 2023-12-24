@@ -45,7 +45,7 @@ resource "helm_release" "nginx-ingress" {
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
   version    = "4.9.0"
-  namespace  = kubernetes_namespace.nginx-ingress.metadata.name
+  namespace  = "nginx-ingress"
 }
 
 resource "helm_release" "superset" {
