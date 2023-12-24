@@ -75,6 +75,11 @@ resource "helm_release" "nginx-ingress" {
   chart      = "ingress-nginx"
   version    = "4.9.0"
   namespace  = "nginx-ingress"
+
+  set {
+    name = "controller.service.externalTrafficPolicy"
+    value = "Local"
+  }
 }
 
 data "kubernetes_service" "nginx-ingress-svc" {
