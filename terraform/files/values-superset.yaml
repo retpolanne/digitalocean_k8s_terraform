@@ -198,7 +198,7 @@ service:
     http: nil
 
 ingress:
-  enabled: true
+  enabled: false
   ingressClassName: nginx
   annotations: {}
     #nginx.ingress.kubernetes.io/whitelist-source-range: 
@@ -476,7 +476,7 @@ supersetCeleryFlower:
     - "-c"
     - "celery --app=superset.tasks.celery_app:app flower"
   service:
-    type: ClusterIP
+    type: NodePort
     annotations: {}
     loadBalancerIP: ~
     port: 5555
