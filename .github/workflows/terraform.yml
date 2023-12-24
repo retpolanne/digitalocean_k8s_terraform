@@ -34,10 +34,10 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -var="digitalocean_token=$DO_ACCESS_TOKEN" -var="digitalocean_access_id=$AWS_ACCESS_KEY_ID" -var="digitalocean_secret_key=$AWS_SECRET_ACCESS_KEY" --var="zone_id=$CLOUDFLARE_ZONE_ID"
+        run: terraform plan -no-color -var="digitalocean_token=$DO_ACCESS_TOKEN" -var="digitalocean_access_id=$AWS_ACCESS_KEY_ID" -var="digitalocean_secret_key=$AWS_SECRET_ACCESS_KEY" --var="zone_id=$CLOUDFLARE_ZONE_ID" --var="cloudflare_token=CLOUDFLARE_TOKEN"
         continue-on-error: true
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve -no-color -var="digitalocean_token=$DO_ACCESS_TOKEN" -var="digitalocean_access_id=$AWS_ACCESS_KEY_ID" -var="digitalocean_secret_key=$AWS_SECRET_ACCESS_KEY" --var="zone_id=$CLOUDFLARE_ZONE_ID"
+        run: terraform apply -auto-approve -no-color -var="digitalocean_token=$DO_ACCESS_TOKEN" -var="digitalocean_access_id=$AWS_ACCESS_KEY_ID" -var="digitalocean_secret_key=$AWS_SECRET_ACCESS_KEY" --var="zone_id=$CLOUDFLARE_ZONE_ID" --var="cloudflare_token=CLOUDFLARE_TOKEN"
         continue-on-error: true

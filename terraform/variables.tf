@@ -13,3 +13,7 @@ variable "digitalocean_secret_key" {
 variable "zone_id" {
   type = string
 }
+
+variable "cloudflare_token" {
+  type = string
+}
