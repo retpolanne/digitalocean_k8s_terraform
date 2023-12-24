@@ -72,10 +72,15 @@ data "kubernetes_resources" "psql_secret" {
   field_selector = "metadata.name==psql-postgresql"
 }
 
+resource "digitalocean_ssh_key" "mba" {
+  name       = "Macbook Air"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFvxXEF5EX02z8V/hHD8vvDBL7fQHxsAhgTs33tBf/zw"
+}
+
 resource "digitalocean_droplet" "openvpn" {
   image     = "openvpn-18-04"
   name      = "openvpn"
   region    = "nyc3"
   size      = "s-1vcpu-1gb"
-  ssh_keys  = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFvxXEF5EX02z8V/hHD8vvDBL7fQHxsAhgTs33tBf/zw"]
+  ssh_keys  = [digitalocean_ssh_key.mba.fingerprint]
 }
