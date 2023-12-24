@@ -72,9 +72,13 @@ data "kubernetes_resources" "psql_secret" {
   field_selector = "metadata.name==psql-postgresql"
 }
 
+resource "github_user_ssh_key" "mba" {
+}
+
 resource "digitalocean_droplet" "openvpn" {
   image     = "openvpn-18-04"
   name      = "openvpn"
   region    = "nyc2"
   size      = "s-1vcpu-1gb"
+  ssh_keys  = [github_user_ssh_key.mba.key]
 }
