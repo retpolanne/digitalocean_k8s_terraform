@@ -29,6 +29,22 @@ resource "digitalocean_droplet" "openvpn" {
   ssh_keys  = [digitalocean_ssh_key.mba.fingerprint]
 }
 
+data "cloudflare_accounts" "retpolanne" {
+  name = "retpolanne"
+}
+
+data "cloudflare_zone" "retpolannedotcom" {
+  account_id = data.cloudflare_accounts.retpolanne.id
+  zone_id    = var.zone_id
+}
+
+resource "cloudflare_record" "openvpn" {
+  zone_id = data.cloudflare_zone.retpolannedotcom.id
+  name    = "openvpn"
+  value   = digitalocean_droplet.openvpn.ipv4_address
+  type    = "A"
+}
+
 provider "kubernetes" {
   host  = digitalocean_kubernetes_cluster.k8s.endpoint
   token = digitalocean_kubernetes_cluster.k8s.kube_config[0].token
