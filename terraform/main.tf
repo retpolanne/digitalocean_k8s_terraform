@@ -106,7 +106,7 @@ resource "helm_release" "superset" {
 
   set {
     name = "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/whitelist-source-range"
-    value = digitalocean_droplet.openvpn.ipv4_address
+    value = digitalocean_droplet.openvpn.ipv4_address_private
   }
 
   values = [
