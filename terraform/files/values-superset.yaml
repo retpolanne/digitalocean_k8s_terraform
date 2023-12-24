@@ -210,7 +210,7 @@ ingress:
   path: /
   pathType: ImplementationSpecific
   hosts:
-    - chart-example.local
+    - superset.retpolanne.com
   tls: []
   extraHostsRaw: []
   #  - secretName: chart-example-tls

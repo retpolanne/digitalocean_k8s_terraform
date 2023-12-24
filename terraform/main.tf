@@ -91,6 +91,13 @@ resource "cloudflare_record" "nginx" {
   type    = "A"
 }
 
+resource "cloudflare_record" "superset" {
+  zone_id = data.cloudflare_zone.retpolannedotcom.id
+  name    = "superset"
+  value   = data.kubernetes_service.nginx-ingress-svc.status.0.load_balancer.0.ingress.0.ip
+  type    = "A"
+}
+
 resource "helm_release" "superset" {
   name       = "superset"
   repository = "https://apache.github.io/superset"
