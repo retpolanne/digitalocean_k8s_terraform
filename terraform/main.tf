@@ -73,9 +73,8 @@ data "kubernetes_resources" "psql_secret" {
 }
 
 resource "digitalocean_droplet" "openvpn" {
-  image     = "ubuntu-20-04-x64"
+  image     = "openvpn-18-04"
   name      = "openvpn"
   region    = "nyc2"
   size      = "s-1vcpu-1gb"
-  user_data = file("files/openvpn.yaml")
 }
