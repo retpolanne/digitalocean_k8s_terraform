@@ -188,14 +188,14 @@ initImage:
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 8088
   annotations: {}
     # cloud.google.com/load-balancer-type: "Internal"
   loadBalancerIP: ~
   nodePort:
     # -- (int)
-    http: nil
+    http: 38088
 
 ingress:
   enabled: false
@@ -476,7 +476,7 @@ supersetCeleryFlower:
     - "-c"
     - "celery --app=superset.tasks.celery_app:app flower"
   service:
-    type: NodePort
+    type: ClusterIP
     annotations: {}
     loadBalancerIP: ~
     port: 5555
