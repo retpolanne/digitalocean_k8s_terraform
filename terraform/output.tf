@@ -5,3 +5,7 @@ output "doctl_cmdline" {
 output "postgres_password" {
   value = base64decode(data.kubernetes_resources.psql_secret.objects[0].data.postgres-password)
 }
+
+output "openvpn_ip" {
+  value = digitalocean_droplet.openvpn.ipv4_address
+}
