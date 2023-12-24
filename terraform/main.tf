@@ -80,6 +80,11 @@ resource "helm_release" "nginx-ingress" {
     name = "controller.service.externalTrafficPolicy"
     value = "Local"
   }
+
+  set {
+    name = "controller.config.use-proxy-protocol"
+    value = "true"
+  }
 }
 
 data "kubernetes_service" "nginx-ingress-svc" {
