@@ -16,6 +16,19 @@ resource "digitalocean_kubernetes_cluster" "k8s" {
   }
 }
 
+resource "digitalocean_ssh_key" "mba" {
+  name       = "Macbook Air"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFvxXEF5EX02z8V/hHD8vvDBL7fQHxsAhgTs33tBf/zw"
+}
+
+resource "digitalocean_droplet" "openvpn" {
+  image     = "openvpn-18-04"
+  name      = "openvpn"
+  region    = "nyc3"
+  size      = "s-1vcpu-1gb"
+  ssh_keys  = [digitalocean_ssh_key.mba.fingerprint]
+}
+
 provider "kubernetes" {
   host  = digitalocean_kubernetes_cluster.k8s.endpoint
   token = digitalocean_kubernetes_cluster.k8s.kube_config[0].token
@@ -54,6 +67,11 @@ resource "helm_release" "superset" {
   chart      = "superset"
   version    = "0.10.15"
 
+  set {
+    name = "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/whitelist-source-range"
+    value = digitalocean_droplet.openvpn.ipv4_address
+  }
+
   values = [
     "${file("files/values-superset.yaml")}"
   ]
@@ -72,15 +90,3 @@ data "kubernetes_resources" "psql_secret" {
   field_selector = "metadata.name==psql-postgresql"
 }
 
-resource "digitalocean_ssh_key" "mba" {
-  name       = "Macbook Air"
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFvxXEF5EX02z8V/hHD8vvDBL7fQHxsAhgTs33tBf/zw"
-}
-
-resource "digitalocean_droplet" "openvpn" {
-  image     = "openvpn-18-04"
-  name      = "openvpn"
-  region    = "nyc3"
-  size      = "s-1vcpu-1gb"
-  ssh_keys  = [digitalocean_ssh_key.mba.fingerprint]
-}
