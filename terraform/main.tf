@@ -34,41 +34,18 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_namespace" "istio-system" {
+resource "kubernetes_namespace" "nginx-ingress" {
   metadata {
-    name = "istio-system"
+    name = "nginx-ingress"
   }
 }
 
-resource "kubernetes_namespace" "istio-ingress" {
-  metadata {
-    name = "istio-ingress"
-  }
-}
-
-resource "helm_release" "istio-base" {
-  name       = "istio-base"
-  repository = "https://istio-release.storage.googleapis.com/charts"
-  chart      = "base"
-  version    = "1.20.1"
-  namespace  = "istio-system"
-}
-
-resource "helm_release" "istiod" {
-  name       = "istiod"
-  repository = "https://istio-release.storage.googleapis.com/charts"
-  chart      = "istiod"
-  version    = "1.20.1"
-  namespace  = "istio-system"
-}
-
-resource "helm_release" "istio-ingress" {
-  name       = "istio-ingress"
-  repository = "https://istio-release.storage.googleapis.com/charts"
-  chart      = "gateway"
-  version    = "1.20.1"
-  namespace  = "istio-ingress"
-  depends_on = [helm_release.istiod]
+resource "helm_release" "nginx-ingress" {
+  name       = "nginx-ingress"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  version    = "4.9.0"
+  namespace  = kubernetes_namespace.nginx-ingress.metadata.name
 }
 
 resource "helm_release" "superset" {
