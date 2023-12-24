@@ -195,7 +195,7 @@ service:
   loadBalancerIP: ~
   nodePort:
     # -- (int)
-    http: 38088
+    http: 30088
 
 ingress:
   enabled: false
