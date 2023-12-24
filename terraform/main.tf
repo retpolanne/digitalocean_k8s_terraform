@@ -75,7 +75,7 @@ data "kubernetes_resources" "psql_secret" {
 resource "digitalocean_droplet" "openvpn" {
   image     = "openvpn-18-04"
   name      = "openvpn"
-  region    = "nyc2"
+  region    = "nyc3"
   size      = "s-1vcpu-1gb"
   ssh_keys  = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFvxXEF5EX02z8V/hHD8vvDBL7fQHxsAhgTs33tBf/zw"]
 }
