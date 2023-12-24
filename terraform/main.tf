@@ -77,12 +77,22 @@ resource "helm_release" "nginx-ingress" {
   namespace  = "nginx-ingress"
 
   set {
+    name = "controller.service.annotations"
+    value = "service\.beta\.kubernetes\.io/do-loadbalancer-enable-proxy-protocol=true"
+  }
+
+  set {
     name = "controller.service.externalTrafficPolicy"
     value = "Local"
   }
 
   set {
     name = "controller.config.use-proxy-protocol"
+    value = "true"
+  }
+
+  set {
+    name = "controller.config.use-forward-headers"
     value = "true"
   }
 }
