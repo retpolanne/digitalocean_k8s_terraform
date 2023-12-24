@@ -9,3 +9,7 @@ variable "digitalocean_access_id" {
 variable "digitalocean_secret_key" {
   type = string
 }
+
+variable "zone_id" {
+  type = string
+}

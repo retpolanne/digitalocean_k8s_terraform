@@ -35,7 +35,7 @@ data "cloudflare_accounts" "retpolanne" {
 
 data "cloudflare_zone" "retpolannedotcom" {
   account_id = data.cloudflare_accounts.retpolanne.id
-  zone_id    = var.zone_id
+  zone_id = var.zone_id
 }
 
 resource "cloudflare_record" "openvpn" {
