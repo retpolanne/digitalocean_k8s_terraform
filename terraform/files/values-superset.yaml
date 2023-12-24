@@ -198,9 +198,10 @@ service:
     http: nil
 
 ingress:
-  enabled: false
-  ingressClassName: ~
+  enabled: true
+  ingressClassName: nginx
   annotations: {}
+    #nginx.ingress.kubernetes.io/whitelist-source-range: 
     # kubernetes.io/tls-acme: "true"
     ## Extend timeout to allow long running queries.
     # nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"

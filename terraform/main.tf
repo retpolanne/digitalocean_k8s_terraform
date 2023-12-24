@@ -71,3 +71,11 @@ data "kubernetes_resources" "psql_secret" {
   kind           = "Secret"
   field_selector = "metadata.name==psql-postgresql"
 }
+
+resource "digitalocean_droplet" "openvpn" {
+  image     = "ubuntu-20-04-x64"
+  name      = "openvpn"
+  region    = "nyc2"
+  size      = "s-1vcpu-1gb"
+  user_data = file("files/openvpn.yaml")
+}
